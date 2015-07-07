@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * IF62C Fundamentos de Programação 2
- * Avaliação parcial.
+ * Avaliação parcial 3  
  * @author Fernando
  */
 public class Lancamento {
