@@ -12,14 +12,14 @@ import java.util.List;
 
 /**
  * IF62C Fundamentos de Programação 2
- * Avaliação parcial.
+ * Avaliação parcial 3
  * @author Fernando
  */
 public class ProcessaLancamentos {
     private BufferedReader reader;
 
     public ProcessaLancamentos(File arquivo) throws FileNotFoundException {
-        reader = new BufferedReader(new FileReader(arquivo.getAbsoluteFile()));
+        reader = new BufferedReader(new FileReader(arquivo));
     }
 
     public ProcessaLancamentos(String path) throws FileNotFoundException {
@@ -27,49 +27,51 @@ public class ProcessaLancamentos {
     }
     
     private String getNextLine() throws IOException {
-        String linha = reader.readLine();
-        return linha;
+        return reader.readLine();
     }
     
     private Lancamento processaLinha(String linha) {
         Integer conta;
-        int ano, mes, dia;
-        Date data = new Date();
+        Date data;
         String descricao;
         Double valor;
-        conta = Integer.valueOf(linha.substring(0,5));
-        ano = Integer.parseInt(linha.substring(6,9));
-        mes = Integer.parseInt(linha.substring(10,11));
-        dia = Integer.parseInt(linha.substring(12,13));
-        data.setYear(ano);
-        data.setMonth(mes);
-        data.setDate(dia);
-        descricao = linha.substring(14,73);
-        valor = (Double.parseDouble(linha.substring(74))/100);
         
-        Lancamento lancamen = new Lancamento(conta, data, descricao, valor);
-        return lancamen;
+        conta = Integer.parseInt(linha.substring(0, 6));
+        
+        data = new Date(Integer.parseInt(linha.substring(6, 10)),
+                        Integer.parseInt(linha.substring(10, 12)),
+                        Integer.parseInt(linha.substring(12, 14)));
+        
+        descricao = linha.substring(14, 74);
+        
+        valor = Double.parseDouble(linha.substring(74, 84)) + 
+                Double.parseDouble(linha.substring(84, 86))/100;
+        
+        Lancamento lancamento = new Lancamento(conta, data, descricao, valor);
+        
+        return lancamento;
     }
     
     private Lancamento getNextLancamento() throws IOException {
-        String linha = getNextLine();
+        String linha = this.getNextLine();
+        
         if(linha == null)
-        return null;
-        else{
-        Lancamento lancamen = processaLinha(linha);
-        return lancamen;
-        }
+            return null;
+        
+        return this.processaLinha(linha);
+        
     }
     
     public List<Lancamento> getLancamentos() throws IOException {
-        Lancamento lanc = getNextLancamento();
-        ArrayList<Lancamento> lista = new ArrayList<>();
-        while(lanc != null){
-        lista.add(lanc);
-        }
-        LancamentoComparator c = new LancamentoComparator();
-        Collections.sort(lista, c);
-        reader.close();
+        List<Lancamento> lista = new ArrayList<>();
+        
+        do {
+            lista.add(processaLinha(this.getNextLine()));
+        } while(this.getNextLine() != null);
+        
+        Collections.sort(lista, new LancamentoComparator());
+        
         return lista;
-    }    
+    }
+    
 }
