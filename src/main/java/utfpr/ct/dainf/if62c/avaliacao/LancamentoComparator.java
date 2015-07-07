@@ -1,29 +1,31 @@
 package utfpr.ct.dainf.if62c.avaliacao;
 
 import java.util.Comparator;
+import java.util.Date;
 
 /**
  * IF62C Fundamentos de Programação 2
- * Avaliação parcial.
+ * Avaliação parcial 3
  * @author Fernando
  */
-public class LancamentoComparator <T extends Lancamento> implements Comparator {
-    LancamentoComparator(){}
-    
-    public int compare(T o1, T o2){
-        if(o1.getConta() < o2.getConta())
-            return -1;
-        else if(o1.getConta() > o2.getConta())
-            return 1;
-        else if(o1.getData().before(o2.getData()))
-            return -1;
-        else if(o1.getData().after(o2.getData()))
-            return 1;
-        else return 0;
-    }
+public class LancamentoComparator implements Comparator<Lancamento> {
 
     @Override
-    public int compare(Object o1, Object o2) {
-       return 0;
+    public int compare(Lancamento lancamento1, Lancamento lancamento2) {
+        if(compareConta(lancamento1.getConta(), lancamento2.getConta()) == 0) 
+            return lancamento1.getData().compareTo(lancamento2.getData());
+        else
+            return compareConta(lancamento1.getConta(), lancamento2.getConta());
     }
+    
+    public int compareConta(Integer conta1, Integer conta2) {
+        if(conta1 == conta2) 
+            return 0;
+        else if(conta1 > conta2) 
+            return 1;
+        else 
+            return -1;
+        
+    }
+    
 }
